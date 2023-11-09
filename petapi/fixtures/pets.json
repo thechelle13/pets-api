@@ -1,0 +1,26 @@
+[
+    {
+        "model": "petapi.pet",
+        "pk": 1,
+        "fields": {
+            "type": "Dog",
+            "name": "Rocket"
+        }
+    },
+    {
+        "model": "petapi.pet",
+        "pk": 2,
+        "fields": {
+            "type": "Cat",
+            "name": "Ebony"
+        }
+    },
+    {
+        "model": "petapi.dog",
+        "pk": 3,
+        "fields": {
+            "type": "Hamster",
+            "name": "Scotty"
+        }
+    }
+]
