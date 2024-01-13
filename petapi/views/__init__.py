@@ -1,4 +1,5 @@
-from .city_view import CityView
-from .pet_view import PetView
-from .post_view import PostView
+from .users_view import UserViewSet
+from .pet_view import PetViewSet
+from .type_view import TypeViewSet
+
 
