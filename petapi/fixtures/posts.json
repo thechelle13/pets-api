@@ -3,9 +3,14 @@
         "model": "petapi.post",
         "pk": 1,
         "fields": {
-            "description": "",
-            "sitStartDate": 2,
-            "sitEndDate": 3
+            "description": "Sample post description",
+            "sitStartDate": "2023-01-15",
+            "sitEndDate": "2023-01-20",
+            "pet": 1,
+            "city": 1, 
+            "user": 1,
+            "approved": true,
+            "publication_date": "2023-01-01" 
     
         }
     },
@@ -13,9 +18,14 @@
         "model": "petapi.post",
         "pk": 2,
         "fields": {
-            "description": "",
-            "sitStartDate": 2,
-            "sitEndDate": 3
+            "description": "Sample post description",
+            "sitStartDate": "2023-01-15",
+            "sitEndDate": "2023-01-20",
+            "pet": 1,
+            "city": 1,
+            "user": 1,
+            "approved": true,
+            "publication_date": "2023-01-01"  
     
         }
     },
@@ -23,9 +33,14 @@
         "model": "petapi.post",
         "pk": 3,
         "fields": {
-            "description": "",
-            "sitStartDate": 2,
-            "sitEndDate": 3
+            "description": "Sample post description",
+            "sitStartDate": "2023-01-15",
+            "sitEndDate": "2023-01-20",
+            "pet": 1,
+            "city": 1,
+            "user": 1,
+            "approved": true,
+            "publication_date": "2023-01-01"  
     
         }
     },
@@ -33,9 +48,14 @@
         "model": "petapi.post",
         "pk": 4,
         "fields": {
-            "description": "",
-            "sitStartDate": 2,
-            "sitEndDate": 3
+            "description": "Sample post description",
+            "sitStartDate": "2023-01-15",
+            "sitEndDate": "2023-01-20",
+            "pet": 1,
+            "city": 1,
+            "user": 1,
+            "approved": true,
+            "publication_date": "2023-01-01"  
     
         }
     }
