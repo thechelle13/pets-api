@@ -3,24 +3,31 @@
         "model": "petapi.pet",
         "pk": 1,
         "fields": {
-            "type": "Dog",
-            "name": "Rocket"
+            "type": 1,
+            "name": "Rocket",
+            "user": 1,
+            "image_url": "https://example.com/image1.jpg"
+
         }
     },
     {
         "model": "petapi.pet",
         "pk": 2,
         "fields": {
-            "type": "Cat",
-            "name": "Ebony"
+            "type": 2,
+            "name": "Ebony",
+            "user": 1,
+            "image_url": "https://example.com/image1.jpg"
         }
     },
     {
-        "model": "petapi.dog",
+        "model": "petapi.pet",
         "pk": 3,
         "fields": {
-            "type": "Hamster",
-            "name": "Scotty"
+            "type": 3,
+            "name": "Scotty",
+            "user": 1,
+            "image_url": "https://example.com/image1.jpg"
         }
     }
 ]
