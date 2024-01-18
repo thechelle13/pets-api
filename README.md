@@ -2,7 +2,7 @@
 
 **Community Pets - Project README**
 
-In Porgess
+In Progress:
 
 A practice project creating an API for a previous front-end capstone.
 

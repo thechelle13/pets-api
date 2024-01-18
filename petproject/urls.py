@@ -2,18 +2,17 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 from petapi.views import (
-    PostViewSet,
+    # PostViewSet,
     UserViewSet,
     TypeViewSet,
     PetViewSet,
-    CityViewSet,
 )
 
 router = DefaultRouter(trailing_slash=False)
 
-router.register(r'cities', CityViewSet, 'city')
+# router.register(r'cities', CityViewSet, 'city')
 router.register(r'pets', PetViewSet, 'pet')
-router.register(r'posts', PostViewSet, 'post')
+# router.register(r'posts', PostViewSet, 'post')
 router.register(r"users", UserViewSet, basename="users")
 router.register(r"types", TypeViewSet, basename="type")
 
