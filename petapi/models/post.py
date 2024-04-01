@@ -1,5 +1,6 @@
 from django.db import models
 from .pet import Pet
+from .petUser import PetUser
 
 
 class Post(models.Model):
@@ -9,7 +10,6 @@ class Post(models.Model):
     publication_date = models.DateField(auto_now_add=True)
     approved = models.BooleanField()
     pet = models.ForeignKey(Pet, on_delete=models.CASCADE)
-    # city = models.CharField(max_length=155)
-    pet_user = models.ForeignKey("PetUser", on_delete=models.CASCADE, related_name="posts")
+    pet_user = models.ForeignKey(PetUser, on_delete=models.CASCADE, related_name="posts")
 
 

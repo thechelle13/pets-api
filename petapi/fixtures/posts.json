@@ -7,11 +7,9 @@
             "sitStartDate": "2023-01-15",
             "sitEndDate": "2023-01-20",
             "pet": 1,
-            "city": 1, 
-            "user": 1,
+            "pet_user": 1,
             "approved": true,
             "publication_date": "2023-01-01" 
-    
         }
     },
     {
@@ -22,11 +20,9 @@
             "sitStartDate": "2023-01-15",
             "sitEndDate": "2023-01-20",
             "pet": 1,
-            "city": 1,
-            "user": 1,
+            "pet_user": 1,
             "approved": true,
             "publication_date": "2023-01-01"  
-    
         }
     },
     {
@@ -37,11 +33,9 @@
             "sitStartDate": "2023-01-15",
             "sitEndDate": "2023-01-20",
             "pet": 1,
-            "city": 1,
-            "user": 1,
+            "pet_user": 1,
             "approved": true,
             "publication_date": "2023-01-01"  
-    
         }
     },
     {
@@ -52,11 +46,9 @@
             "sitStartDate": "2023-01-15",
             "sitEndDate": "2023-01-20",
             "pet": 1,
-            "city": 1,
-            "user": 1,
+            "pet_user": 1,
             "approved": true,
             "publication_date": "2023-01-01"  
-    
         }
     }
 ]

@@ -7,19 +7,19 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from petapi.models import PetUser
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ["id", "username", "password", "first_name", "last_name", "email"]
-        extra_kwargs = {"password": {"write_only": True}}
-
 class PetUserSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
-
     class Meta:
         model = PetUser
-        fields = ("user", "active", "bio", "city")
+        fields = ("id", "user", "active", "bio", "city")
 
+class UserSerializer(serializers.ModelSerializer):
+    pet_user = PetUserSerializer(many=False, read_only=True)  # Include PetUser data if available
+
+    class Meta:
+        model = User
+        fields = ["id", "username", "password", "first_name", "last_name", "email", "pet_user"]
+        extra_kwargs = {"password": {"write_only": True}}
+        
 class UserViewSet(viewsets.ViewSet):
     queryset = User.objects.all()
     permission_classes = [permissions.AllowAny]
@@ -34,12 +34,12 @@ class UserViewSet(viewsets.ViewSet):
                 status=status.HTTP_401_UNAUTHORIZED,
             )
 
-        # Filter TechUser objects for the current authenticated user
-        pet_user = PetUser.objects.filter(user=request.user).first()
+        # Filter PetUser objects for the current authenticated user
+        pet_users = PetUser.objects.filter(user=request.user)
+        serializer = PetUserSerializer(pet_users, many=True)
 
         # Check if the PetUser exists
-        if pet_user:
-            serializer = PetUserSerializer(pet_user)
+        if pet_users.exists():
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(
@@ -101,13 +101,14 @@ class UserViewSet(viewsets.ViewSet):
                 password=serializer.validated_data["password"],
                 first_name=serializer.validated_data["first_name"],
                 last_name=serializer.validated_data["last_name"],
-                email=serializer.validated_data["username"],
-                # email=serializer.validated_data["email"],
+                # city=serializer.validated_data["city"],
+                email=serializer.validated_data["email"],
             )
             pet_user = PetUser.objects.create(
                 user=user,
                 active=True,
                 bio=request.data.get("bio"),
+                city=request.data.get("city"),
             )
             token, created = Token.objects.get_or_create(user=user)
             return Response({"token": token.key}, status=status.HTTP_201_CREATED)
