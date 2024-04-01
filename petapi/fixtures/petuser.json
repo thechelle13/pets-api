@@ -1,0 +1,26 @@
+[
+    {
+        "model": "petapi.petuser",
+        "pk": 1,
+        "fields": {
+            "bio": "Sample bio for user 1",
+            "city": "City for user 1",
+            "created_on": "2023-11-16T17:13:29.410Z",
+            "active": true,
+            "user": 1
+        }
+    },
+    {
+        "model": "petapi.petuser",
+        "pk": 2,
+        "fields": {
+            "bio": "Sample bio for user 2",
+            "city": "City for user 2",
+            "created_on": "2023-11-17T19:38:46.300Z",
+            "active": true,
+            "user": 2
+        }
+    }
+]
+
+
