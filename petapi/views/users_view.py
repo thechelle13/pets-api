@@ -59,6 +59,27 @@ class UserViewSet(viewsets.ViewSet):
         except User.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+    # def update(self, request, pk=None):
+    #     try:
+    #         user_instance = User.objects.get(pk=pk)
+
+    #         # Is the authenticated user allowed to edit this user?
+    #         self.check_object_permissions(request, user_instance)
+
+    #         serializer = UserSerializer(user_instance, data=request.data, partial=True)
+    #         if serializer.is_valid():
+    #             serializer.save()
+
+    #             serialized_user = UserSerializer(
+    #                 user_instance, context={"request": request}
+    #             )
+    #             return Response(serialized_user.data, status=status.HTTP_200_OK)
+
+    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    #     except User.DoesNotExist:
+    #         return Response(status=status.HTTP_404_NOT_FOUND)
+        
     def update(self, request, pk=None):
         try:
             user_instance = User.objects.get(pk=pk)
@@ -66,19 +87,24 @@ class UserViewSet(viewsets.ViewSet):
             # Is the authenticated user allowed to edit this user?
             self.check_object_permissions(request, user_instance)
 
-            serializer = UserSerializer(user_instance, data=request.data, partial=True)
-            if serializer.is_valid():
-                serializer.save()
+            # Parse pet_user data from request
+            pet_user_data = request.data.get('pet_user', {})
 
-                serialized_user = UserSerializer(
-                    user_instance, context={"request": request}
-                )
-                return Response(serialized_user.data, status=status.HTTP_200_OK)
+            # Update PetUser model fields
+            pet_user = user_instance.pet_user
+            pet_user.city = pet_user_data.get('city', pet_user.city)
+            pet_user.bio = pet_user_data.get('bio', pet_user.bio)
+            # Update other fields if needed
 
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            # Save PetUser instance
+            pet_user.save()
+
+            serializer = UserSerializer(user_instance, context={"request": request})
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
         except User.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
         
     def destroy(self, request, pk=None):
         try:
