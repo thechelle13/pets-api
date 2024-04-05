@@ -1,9 +1,10 @@
 from rest_framework import viewsets, status
 from rest_framework import serializers
 from rest_framework.response import Response
-from petapi.models import Post, PetUser
+from petapi.models import Post, PetUser, Comment
 from .users_view import PetUserSerializer
 from .type_view import TypeSerializer
+from .comment_view import CommentSerializer
 
 
 
@@ -11,16 +12,22 @@ class PostSerializer(serializers.ModelSerializer):
     
     pet_user = PetUserSerializer(many=False)
     is_owner = serializers.SerializerMethodField()
+    comments = CommentSerializer(many=True)  
+    likes = serializers.SerializerMethodField() 
     # type = TypeSerializer(many=False)
 
 
     def get_is_owner(self, obj):
         # Check if the authenticated user is the owner
         return self.context["request"].user == obj.pet_user.user
+    
+    def get_likes(self, obj):
+        # Return number of likes for the post
+        return obj.likes.count()
 
     class Meta:
         model = Post
-        fields = ('id', 'pet_user', 'description','sitStartDate', 'sitEndDate', "is_owner", )
+        fields = ('id', 'pet_user', 'description','sitStartDate', 'sitEndDate', "is_owner", 'comments', 'likes', )
         
 class PostViewSet(viewsets.ViewSet):
     def list(self, request):
