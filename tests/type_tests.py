@@ -23,3 +23,23 @@ class TypeTests(APITestCase):
         self.assertEqual(json_response[0]["label"], "Dog")
         self.assertEqual(json_response[1]["label"], "Cat")
         self.assertEqual(json_response[2]["label"], "Hamster")
+        
+    def test_create_type(self):
+        url = "/types"
+        data = {
+            'label': 'Bat',
+          
+        }
+
+        # Initiate request and store response
+        response = self.client.post(url, data, format='json')
+        # Check the response status
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        # Optionally, you can also check the content of the response
+        self.assertEqual(response.data['label'], 'Bat')
+        
+
+        # Check if the pet object is created in the database
+        type = Type.objects.get(label='Bat')
+        self.assertEqual(type.label,'Bat')

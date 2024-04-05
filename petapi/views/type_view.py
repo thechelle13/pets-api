@@ -22,6 +22,13 @@ class TypeViewSet(viewsets.ViewSet):
         except Type.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         
+    def create(self, request):
+        serializer = TypeSerializer(data=request.data)
+        if serializer.is_valid():
+            type = serializer.save()  # Using serializer.save() to create the object
+            return Response(TypeSerializer(type).data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
     def update(self, request, pk=None):
         try:
             type = Type.objects.get(pk=pk)

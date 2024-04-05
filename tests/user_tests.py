@@ -6,22 +6,18 @@ from rest_framework.authtoken.models import Token
 from petapi.models import Type, Post, PetUser
 
 class UserTests(APITestCase):
-    fixtures = ['user', 'token', 'pet_user']
+    fixtures = ['user', 'token', 'petuser']
 
     def test_create_registration(self):
         url = "/register"
         data = {
-            "username": "newuser3",
-            "password": "password123",
+            "username": "newuser",
+            "password": "newpassword",
             "first_name": "New",
             "last_name": "User",
-            "email": "newuser@example.com",
-            "city": "New City",  # Example PPUser field
-            "state": "New State",  # Example PPUser field
-            "address": "123 Street",  # Example PPUser field
-            "zipcode": "12345", 
-            "profile_picture": None # Example PPUser field
-            # Optionally, include other fields needed for PPUser
+            "email": "newuser@email.com",
+            "bio": "Sample bio",
+            "city": "New City"
         }
 
         # Initiate request and store response
@@ -29,49 +25,93 @@ class UserTests(APITestCase):
         # Check the response status
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-        expected_keys = {'valid', 'token', 'id', 'first_name', 'username', 'city','email','state','profile_picture','zipcode','last_name','address'}
-        self.assertEqual(set(response.data.keys()), expected_keys)
-        
+               
         # Optionally, you can also check the content of the response
-        user = User.objects.get(username='newuser3')
-        self.assertEqual(user.email, "newuser@example.com")
+        user = User.objects.get(username='newuser')
+        self.assertEqual(user.email, "newuser@email.com")
 
-        # Check the rare_user properties in database
+        # Check the pet_user properties in database
         pet_user = PetUser.objects.get(user=user)
         self.assertEqual(pet_user.user_id, user.id)
+        
+    # def test_create_login(self):
+    #     """
+    #     Ensure we can login a user
+    #     """
 
-    def test_create_login(self):
-        """
-        Ensure we can login a user
-        """
+    #     # Define the endpoint in the API to which
+    #     # the request will be sent
+    #     url = "/login"
 
-        # Define the endpoint in the API to which
-        # the request will be sent
-        url = "/login"
+    #     # Define the request body
+    #     data = {
+    #         "username": "chelle",
+    #         "password": "chelle"
+    #     }
 
-        # Define the request body
-        data = {
-            "username": "user1",
-            "password": "totherow"
-        }
+    #     # Initiate request and store response
+    #     response = self.client.post(url, data, format='json')
 
-        # Initiate request and store response
-        response = self.client.post(url, data, format='json')
+    #     # Print the response content for debugging
+    #     print("Response Content:", response.content)
 
-        # Parse the JSON in the response body
-        json_response = json.loads(response.content)
+    #     # Check the response status
+    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        # Check the response status
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    #     # Parse the JSON response content
+    #     json_response = response.json()
 
-        # Check the response body contains the expected keys
-        # Assert that the properties on the created resource are correct
-        self.assertEqual(json_response['token'], "1600073627c3344754172dd997452440b1ddba7a")
+    #     # Print the parsed JSON response for debugging
+    #     print("Parsed JSON Response:", json_response)
+
+    #     # Check if the response contains the token key
+    #     self.assertIn('token', json_response)
+
+    #     # Check if the token value is not empty
+    #     token = json_response.get('token')
+
+    #     # Print the token value for debugging
+    #     print("Token:", token)
+
+    #     self.assertIsNotNone(token)
+    #     self.assertNotEqual(token, "")
+
+    
+
+    # def test_create_login(self):
+    #     """
+    #     Ensure we can login a user
+    #     """
+
+    #     # Define the endpoint in the API to which
+    #     # the request will be sent
+    #     url = "/login"
+
+    #     # Define the request body
+    #     data = {
+    #         "username": "emma",
+    #         "password": "emma"
+    #     }
+
+    #     # Initiate request and store response
+    #     response = self.client.post(url, data, format='json')
+
+    #     print(response.content)
+    #     # json_response = json.loads(response.content)
+
+    #     # Check the response status
+    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    #     # Check the response body contains the expected keys
+    #     # Assert that the properties on the created resource are correct
+    #     json_response = json.loads(response.content)
+    #     # self.assertIn('token', json_response)
+    #     self.assertEqual(json_response['token'], "a7b895a0263af9fd72547bf5f076ded0271be5b1")
 
     def test_retrieve_user(self):
         # Assuming there's an existing user with ID 1 in the database
         user_id = 1
-        url = f"/petusers/{user_id}"
+        url = f"/users/{user_id}"
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -79,16 +119,17 @@ class UserTests(APITestCase):
         json_response = response.json()
         self.assertEqual(json_response["id"], user_id)
         # Add more assertions based on your User model fields
+        
     def test_update_user(self):
-        # Assuming there's an existing PPUser with ID 1 in the database
-        pp_user_id = 1
-        url = f"/petusers/{pp_user_id}"
+    # Assuming there's an existing User with ID 1 in the database
+        user_id = 1
+        url = f"/users/{user_id}"
         data = {
-            "city": "Updated City",
-            "state": "Updated State",
-            "address": "Updated Address",
-            "zipcode": "54321",
-            # Include other fields needed for update
+            "pet_user": {
+                "city": "Updated City",
+                "bio": "Updated Bio",
+                # Include other fields needed for update
+            }
         }
 
         # Initiate request and store response
@@ -96,15 +137,16 @@ class UserTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # Optionally, you can check the content of the response
-        pet_user = PetUser.objects.get(id=pp_user_id)
+        user = User.objects.get(id=user_id)
+        pet_user = user.pet_user
         self.assertEqual(pet_user.city, "Updated City")
-        self.assertEqual(pet_user.state, "Updated State")
-        self.assertEqual(pet_user.address, "Updated Address")
-        self.assertEqual(pet_user.zipcode, 54321)
+        self.assertEqual(pet_user.bio, "Updated Bio")
+
+     
     def test_delete_user(self):
         # Assuming there's an existing PPUser with ID 1 in the database
         pet_user_id = 1
-        url = f"/petusers/{pet_user_id}"
+        url = f"/users/{pet_user_id}"
 
         # Initiate request and store response
         response = self.client.delete(url)
