@@ -3,52 +3,60 @@
         "model": "petapi.post",
         "pk": 1,
         "fields": {
-            "description": "Sample post description",
+            "description": "Sample post description 1",
             "sitStartDate": "2023-01-15",
             "sitEndDate": "2023-01-20",
             "pet": 1,
             "pet_user": 1,
             "approved": true,
-            "publication_date": "2023-01-01" 
+            "publication_date": "2023-01-01",
+            "comments": [],
+            "likes": []
         }
     },
     {
         "model": "petapi.post",
         "pk": 2,
         "fields": {
-            "description": "Sample post description",
+            "description": "Sample post description 2",
             "sitStartDate": "2023-01-15",
             "sitEndDate": "2023-01-20",
             "pet": 1,
             "pet_user": 1,
             "approved": true,
-            "publication_date": "2023-01-01"  
+            "publication_date": "2023-01-01",
+            "comments": [],
+            "likes": []
         }
     },
     {
         "model": "petapi.post",
         "pk": 3,
         "fields": {
-            "description": "Sample post description",
+            "description": "Sample post description 3",
             "sitStartDate": "2023-01-15",
             "sitEndDate": "2023-01-20",
             "pet": 1,
             "pet_user": 1,
             "approved": true,
-            "publication_date": "2023-01-01"  
+            "publication_date": "2023-01-01",
+            "comments": [],
+            "likes": []
         }
     },
     {
         "model": "petapi.post",
         "pk": 4,
         "fields": {
-            "description": "Sample post description",
+            "description": "Sample post description 4",
             "sitStartDate": "2023-01-15",
             "sitEndDate": "2023-01-20",
             "pet": 1,
             "pet_user": 1,
             "approved": true,
-            "publication_date": "2023-01-01"  
+            "publication_date": "2023-01-01",
+            "comments": [],
+            "likes": []
         }
     }
 ]

@@ -1,0 +1,32 @@
+[
+    {
+        "model": "petapi.comment",
+        "pk": 1,
+        "fields": {
+            "post": 1,
+            "user": 1,
+            "text": "This is a sample comment 1.",
+            "creation_date": "2023-01-01"
+        }
+    },
+    {
+        "model": "petapi.comment",
+        "pk": 2,
+        "fields": {
+            "post": 1,
+            "user": 2,
+            "text": "This is a sample comment 2.",
+            "creation_date": "2023-01-02"
+        }
+    },
+    {
+        "model": "petapi.comment",
+        "pk": 3,
+        "fields": {
+            "post": 2,
+            "user": 1,
+            "text": "This is a sample comment 3.",
+            "creation_date": "2023-01-03"
+        }
+    }
+]
