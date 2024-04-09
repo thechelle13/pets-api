@@ -34,79 +34,37 @@ class UserTests(APITestCase):
         pet_user = PetUser.objects.get(user=user)
         self.assertEqual(pet_user.user_id, user.id)
         
-    # def test_create_login(self):
-    #     """
-    #     Ensure we can login a user
-    #     """
-
-    #     # Define the endpoint in the API to which
-    #     # the request will be sent
-    #     url = "/login"
-
-    #     # Define the request body
-    #     data = {
-    #         "username": "chelle",
-    #         "password": "chelle"
-    #     }
-
-    #     # Initiate request and store response
-    #     response = self.client.post(url, data, format='json')
-
-    #     # Print the response content for debugging
-    #     print("Response Content:", response.content)
-
-    #     # Check the response status
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    #     # Parse the JSON response content
-    #     json_response = response.json()
-
-    #     # Print the parsed JSON response for debugging
-    #     print("Parsed JSON Response:", json_response)
-
-    #     # Check if the response contains the token key
-    #     self.assertIn('token', json_response)
-
-    #     # Check if the token value is not empty
-    #     token = json_response.get('token')
-
-    #     # Print the token value for debugging
-    #     print("Token:", token)
-
-    #     self.assertIsNotNone(token)
-    #     self.assertNotEqual(token, "")
 
     
+    def test_create_login(self):
+    # Define the endpoint in the API to which the request will be sent
+        url = "/login"
 
-    # def test_create_login(self):
-    #     """
-    #     Ensure we can login a user
-    #     """
+        # Define valid login credentials
+        data = {
+            "username": "michelle@email.com",  
+            "password": "totherow"   
+        }
 
-    #     # Define the endpoint in the API to which
-    #     # the request will be sent
-    #     url = "/login"
+        # Initiate request and store response
+        response = self.client.post(url, data, format='json')
+        # print("Request Data:", data)
+        # print("Response Content:", response.content)
+        # Check the response status
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    #     # Define the request body
-    #     data = {
-    #         "username": "emma",
-    #         "password": "emma"
-    #     }
+        # Parse the JSON response content
+        json_response = response.json()
+        # print("Parsed JSON Response:", json_response)
+        # Check if the response contains the token key
+        self.assertIn('token', json_response)
 
-    #     # Initiate request and store response
-    #     response = self.client.post(url, data, format='json')
+        # Check if the token value is not empty
+        token = json_response.get('token')
+        # print("Token:", token)
+        self.assertIsNotNone(token)
+        self.assertNotEqual(token, "")
 
-    #     print(response.content)
-    #     # json_response = json.loads(response.content)
-
-    #     # Check the response status
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    #     # Check the response body contains the expected keys
-    #     # Assert that the properties on the created resource are correct
-    #     json_response = json.loads(response.content)
-    #     # self.assertIn('token', json_response)
-    #     self.assertEqual(json_response['token'], "a7b895a0263af9fd72547bf5f076ded0271be5b1")
 
     def test_retrieve_user(self):
         # Assuming there's an existing user with ID 1 in the database
@@ -118,20 +76,29 @@ class UserTests(APITestCase):
         # Optionally, you can also check the content of the response
         json_response = response.json()
         self.assertEqual(json_response["id"], user_id)
-        # Add more assertions based on your User model fields
+        
         
     def test_update_user(self):
     # Assuming there's an existing User with ID 1 in the database
         user_id = 1
         url = f"/users/{user_id}"
+        # data = {
+        #     "pet_user": {
+        #         "city": "Updated City",
+        #         "bio": "Updated Bio",
+            
+        #     }
+        # }
         data = {
+            "username": "updateduser",
+            "email": "updateduser@email.com",
+            "first_name": "Updated",
+            "last_name": "User",
             "pet_user": {
                 "city": "Updated City",
                 "bio": "Updated Bio",
-                # Include other fields needed for update
             }
         }
-
         # Initiate request and store response
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
