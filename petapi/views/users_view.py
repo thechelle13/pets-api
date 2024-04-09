@@ -13,7 +13,7 @@ class PetUserSerializer(serializers.ModelSerializer):
         fields = ("id", "user", "active", "bio", "city")
 
 class UserSerializer(serializers.ModelSerializer):
-    pet_user = PetUserSerializer(many=False, read_only=True)  # Include PetUser data if available
+    pet_user = PetUserSerializer(many=False, read_only=True)  
 
     class Meta:
         model = User
@@ -37,17 +37,20 @@ class UserViewSet(viewsets.ViewSet):
         # Filter PetUser objects for the current authenticated user
         pet_users = PetUser.objects.filter(user=request.user)
         serializer = PetUserSerializer(pet_users, many=True)
+        
 
         # Check if the PetUser exists
         if pet_users.exists():
             return Response(serializer.data, status=status.HTTP_200_OK)
+       
+        
         else:
             return Response(
                 {"error": "PetUser not found"}, status=status.HTTP_404_NOT_FOUND
             )
             
     def list(self, request):
-        users = User.objects.all()  # Retrieve all users
+        users = User.objects.all()  
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -59,33 +62,22 @@ class UserViewSet(viewsets.ViewSet):
         except User.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-    # def update(self, request, pk=None):
-    #     try:
-    #         user_instance = User.objects.get(pk=pk)
-
-    #         # Is the authenticated user allowed to edit this user?
-    #         self.check_object_permissions(request, user_instance)
-
-    #         serializer = UserSerializer(user_instance, data=request.data, partial=True)
-    #         if serializer.is_valid():
-    #             serializer.save()
-
-    #             serialized_user = UserSerializer(
-    #                 user_instance, context={"request": request}
-    #             )
-    #             return Response(serialized_user.data, status=status.HTTP_200_OK)
-
-    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    #     except User.DoesNotExist:
-    #         return Response(status=status.HTTP_404_NOT_FOUND)
-        
+ 
     def update(self, request, pk=None):
         try:
             user_instance = User.objects.get(pk=pk)
 
             # Is the authenticated user allowed to edit this user?
             self.check_object_permissions(request, user_instance)
+
+            # Update User model fields
+            user_instance.email = request.data.get('email', user_instance.email)
+            user_instance.first_name = request.data.get('first_name', user_instance.first_name)
+            user_instance.last_name = request.data.get('last_name', user_instance.last_name)
+            # Update other fields if needed
+
+            # Save User instance
+            user_instance.save()
 
             # Parse pet_user data from request
             pet_user_data = request.data.get('pet_user', {})
@@ -104,6 +96,32 @@ class UserViewSet(viewsets.ViewSet):
 
         except User.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+        
+    # def update(self, request, pk=None):
+    #     try:
+    #         user_instance = User.objects.get(pk=pk)
+
+    #         # Is the authenticated user allowed to edit this user?
+    #         self.check_object_permissions(request, user_instance)
+
+    #         # Parse pet_user data from request
+    #         pet_user_data = request.data.get('pet_user', {})
+
+    #         # Update PetUser model fields
+    #         pet_user = user_instance.pet_user
+    #         pet_user.city = pet_user_data.get('city', pet_user.city)
+    #         pet_user.bio = pet_user_data.get('bio', pet_user.bio)
+    #         # Update other fields if needed
+
+    #         # Save PetUser instance
+    #         pet_user.save()
+
+    #         serializer = UserSerializer(user_instance, context={"request": request})
+    #         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    #     except User.DoesNotExist:
+    #         return Response(status=status.HTTP_404_NOT_FOUND)
 
         
     def destroy(self, request, pk=None):
