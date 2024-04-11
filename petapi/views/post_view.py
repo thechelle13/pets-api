@@ -9,17 +9,17 @@ from .comment_view import CommentSerializer
 
 
 class PostSerializer(serializers.ModelSerializer):
-    
-    pet_user = PetUserSerializer(many=False)
+    pet_user = PetUserSerializer(read_only=True)
     is_owner = serializers.SerializerMethodField()
-    comments = CommentSerializer(many=True)  
-    likes = serializers.SerializerMethodField() 
-    # type = TypeSerializer(many=False)
-
+    comments = CommentSerializer(many=True, read_only=True)
+    likes = serializers.SerializerMethodField(read_only=True) 
 
     def get_is_owner(self, obj):
-        # Check if the authenticated user is the owner
-        return self.context["request"].user == obj.pet_user.user
+        request = self.context.get('request')
+        if request:
+            # Check if the authenticated user is the owner
+            return request.user == obj.pet_user.user
+        return False
     
     def get_likes(self, obj):
         # Return number of likes for the post
@@ -79,23 +79,12 @@ class PostViewSet(viewsets.ViewSet):
             # Is the authenticated user allowed to edit this post?
             self.check_object_permissions(request, post)
 
-            serializer = PostSerializer(data=request.data)
+            serializer = PostSerializer(post, data=request.data, partial=True)
             if serializer.is_valid():
-                
-                post.title = serializer.validated_data["title"]
-                # post.publication_date = serializer.validated_data["publication_date"]
-                # post.affliate = serializer.validated_data["affliate"]
-                # post.image_url = serializer.validated_data["image_url"]
-                # post.content = serializer.validated_data["content"]
-                # post.approved = serializer.validated_data["approved"]
-                post.type = serializer.validated_data["type"]
-                post.save()
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
 
-                
-                serializer = PostSerializer(post, context={"request": request})
-                return Response(None, status.HTTP_204_NO_CONTENT)
-
-            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         except Post.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)    
