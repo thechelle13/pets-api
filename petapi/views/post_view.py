@@ -44,6 +44,33 @@ class PostViewSet(viewsets.ViewSet):
         except Post.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         
+    def create(self, request):
+        # Retrieve pet_user object associated with the authenticated user
+        pet_user = PetUser.objects.get(user=request.user)
+        
+        # Extract necessary fields from request data
+        description = request.data.get("description")
+        sit_start_date = request.data.get("sitStartDate")
+        sit_end_date = request.data.get("sitEndDate")
+        pet_id = request.data.get("pet_id")
+       
+        approved = request.data.get("approved", False) 
+
+        # Create the post object
+        post = Post.objects.create(
+            pet_user=pet_user,
+            description=description,
+            sitStartDate=sit_start_date,
+            sitEndDate=sit_end_date,
+            pet_id=pet_id,
+         
+            approved=approved
+           
+        )
+
+        # Serialize the created post object and return the serialized data in the response
+        serializer = PostSerializer(post)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
         
     def update(self, request, pk=None):
         try:
