@@ -82,13 +82,7 @@ class UserTests(APITestCase):
     # Assuming there's an existing User with ID 1 in the database
         user_id = 1
         url = f"/users/{user_id}"
-        # data = {
-        #     "pet_user": {
-        #         "city": "Updated City",
-        #         "bio": "Updated Bio",
-            
-        #     }
-        # }
+       
         data = {
             "username": "updateduser",
             "email": "updateduser@email.com",

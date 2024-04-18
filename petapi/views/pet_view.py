@@ -4,13 +4,16 @@ from rest_framework.response import Response
 from petapi.models import Pet
 
 class PetSerializer(serializers.ModelSerializer):
+    type = serializers.StringRelatedField(source='type.label', read_only=True) 
+    
     class Meta:
         model = Pet
         fields = ('id', 'user','name', 'type', 'image_url')
 
 class PetViewSet(viewsets.ViewSet):
     def list(self, request):
-        pets = Pet.objects.all()
+        pets = Pet.objects.filter(user=request.user.id)
+      
         serializer = PetSerializer(pets, many=True)
         return Response(serializer.data)
 

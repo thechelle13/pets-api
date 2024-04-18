@@ -17,7 +17,6 @@ class PostSerializer(serializers.ModelSerializer):
     def get_is_owner(self, obj):
         request = self.context.get('request')
         if request:
-            # Check if the authenticated user is the owner
             return request.user == obj.pet_user.user
         return False
     
