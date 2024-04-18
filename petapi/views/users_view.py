@@ -6,11 +6,13 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from petapi.models import PetUser
+from rest_framework.authentication import TokenAuthentication
+
 
 class PetUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = PetUser
-        fields = ("id", "user", "active", "bio", "city")
+        fields = ("id", "active", "bio", "city")
 
 class UserSerializer(serializers.ModelSerializer):
     pet_user = PetUserSerializer(many=False, read_only=True)  
@@ -19,40 +21,64 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ["id", "username", "password", "first_name", "last_name", "email", "pet_user"]
         extra_kwargs = {"password": {"write_only": True}}
-        
+
 class UserViewSet(viewsets.ViewSet):
     queryset = User.objects.all()
     permission_classes = [permissions.AllowAny]
     serializer_class = UserSerializer
+    authentication_classes = [TokenAuthentication] 
 
-    @action(detail=False, methods=["get"], url_path="petusers")
-    def get_pet_users(self, request):
-        # Ensure the user is authenticated
-        if not request.user.is_authenticated:
-            return Response(
-                {"error": "Authentication required"},
-                status=status.HTTP_401_UNAUTHORIZED,
-            )
+    # @action(detail=False, methods=["get"], url_path="users")
+    # def get_pet_users(self, request):
+    #     if not request.user.is_authenticated:
+    #         return Response(
+    #             {"error": "Authentication required"},
+    #             status=status.HTTP_401_UNAUTHORIZED,
+    #         )
 
-        # Filter PetUser objects for the current authenticated user
-        pet_users = PetUser.objects.filter(user=request.user)
-        serializer = PetUserSerializer(pet_users, many=True)
-        
+    #     pet_users = PetUser.objects.filter(user=request.user)
+    #     serializer = UserSerializer(pet_users, many=True, context={'request': request})
 
-        # Check if the PetUser exists
-        if pet_users.exists():
+    #     if pet_users.exists():
+    #         return Response(serializer.data, status=status.HTTP_200_OK)
+    #     else:
+    #         return Response(
+    #             {"error": "PetUser not found"}, status=status.HTTP_404_NOT_FOUND
+    #         )
+
+    
+    @action(detail=False, methods=["get"], url_path="users")
+    def get_user(self, request):
+        try:
+            # Extract token from the request headers
+            token_key = request.headers.get("Authorization").split()[1]
+            # Retrieve the user associated with the token
+            user = Token.objects.get(key=token_key).user
+            # Serialize the user data
+            serializer = UserSerializer(user, context={'request': request})
             return Response(serializer.data, status=status.HTTP_200_OK)
-       
-        
-        else:
-            return Response(
-                {"error": "PetUser not found"}, status=status.HTTP_404_NOT_FOUND
-            )
+        except Token.DoesNotExist:
+            return Response({"error": "Token not found"}, status=status.HTTP_401_UNAUTHORIZED)
+
             
+    # def list(self, request):
+    #     users = User.objects.all()  
+    #     serializer = UserSerializer(users, many=True)
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
+    
     def list(self, request):
-        users = User.objects.all()  
-        serializer = UserSerializer(users, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            # Extract token from the request headers
+            token_key = request.headers.get("Authorization").split()[1]
+            # Retrieve the user associated with the token
+            user = Token.objects.get(key=token_key).user
+            # Filter users based on the token
+            users = User.objects.filter(pk=user.pk)
+            serializer = UserSerializer(users, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Token.DoesNotExist:
+            return Response({"error": "Token not found"}, status=status.HTTP_401_UNAUTHORIZED)
+
 
     def retrieve(self, request, pk=None):
         try:
