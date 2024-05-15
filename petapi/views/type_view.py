@@ -2,6 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework import serializers
 from rest_framework.response import Response
 from petapi.models import Type
+from rest_framework.permissions import AllowAny 
 
 class TypeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -9,6 +10,7 @@ class TypeSerializer(serializers.ModelSerializer):
         fields = ["id", "label"]
 
 class TypeViewSet(viewsets.ViewSet):
+     
     def list(self, request):
         types = Type.objects.all()
         serializer = TypeSerializer(types, many=True)
@@ -25,28 +27,28 @@ class TypeViewSet(viewsets.ViewSet):
     def create(self, request):
         serializer = TypeSerializer(data=request.data)
         if serializer.is_valid():
-            type = serializer.save()  # Using serializer.save() to create the object
+            type = serializer.save() 
             return Response(TypeSerializer(type).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+
+
+    
     def update(self, request, pk=None):
         try:
             type = Type.objects.get(pk=pk)
-            # Is the authenticated user allowed to edit this tag?
             self.check_object_permissions(request, type)
 
-            serializer = TypeSerializer(data=request.data)
+            serializer = TypeSerializer(type, data=request.data)
             if serializer.is_valid():
-                type.label = serializer.validated_data["label"]
-                type.save()
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
 
-                serializer = TypeSerializer(type, context={"request": request})
-                return Response(None, status.HTTP_204_NO_CONTENT)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        except Type.DoesNotExist:
+            return Response(status.HTTP_404_NOT_FOUND)
 
-        except type.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+
 
     def destroy(self, request, pk=None):
         try:
