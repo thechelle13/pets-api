@@ -65,23 +65,22 @@ class PetViewSet(viewsets.ViewSet):
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     
-    # def update(self, request, pk=None):
-    #     try:
-    #         # Fetch the Pet instance associated with the current user
-    #         pet = Pet.objects.get(pk=pk, user__user=request.user)
-            
-    #         # Ensure the user instance exists
-    #         if pet:
-    #             # Update only the fields that are allowed to be updated
-    #             serializer = PetSerializer(pet, data=request.data, partial=True)
-    #             if serializer.is_valid():
-    #                 serializer.save()
-    #                 return Response(serializer.data, status=status.HTTP_200_OK)
-    #             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    #         else:
-    #             return Response({"error": "Pet does not exist or does not belong to the current user."}, status=status.HTTP_404_NOT_FOUND)
-    #     except Pet.DoesNotExist:
-    #         return Response({"error": "Pet does not exist or does not belong to the current user."}, status=status.HTTP_404_NOT_FOUND)
+    def update(self, request, pk=None):
+        try:
+            pet = Pet.objects.get(pk=pk, user=request.user)
+            if not pet:
+                return Response({"error": "Pet does not exist or does not belong to the current user."}, status=status.HTTP_404_NOT_FOUND)
+                
+            serializer = PetSerializer(pet, data=request.data, partial=True)
+            if serializer.is_valid():
+                # Ensure the user field remains the same
+                serializer.save(user=pet.user)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        except Pet.DoesNotExist:
+            return Response({"error": "Pet does not exist or does not belong to the current user."}, status=status.HTTP_404_NOT_FOUND)
+
 
 
     def destroy(self, request, pk=None):
