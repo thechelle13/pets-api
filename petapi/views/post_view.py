@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from petapi.models import Post, PetUser, Pet
 from .users_view import PetUserSerializer
 from .type_view import TypeSerializer
+from .comment_view import CommentSerializer
 
 from .pet_view import PetSerializer
 from django.contrib.auth.models import User
@@ -16,7 +17,8 @@ class PostSerializer(serializers.ModelSerializer):
     
 
     pets = PetSerializer(many=True)
-    # pet = serializers.PrimaryKeyRelatedField(queryset=Pet.objects.all(), many=True)
+    comments = CommentSerializer(many=True, read_only=True)
+    likes = serializers.SerializerMethodField(read_only=True)
 
     def get_is_owner(self, obj):
         request = self.context.get('request')
@@ -24,11 +26,12 @@ class PostSerializer(serializers.ModelSerializer):
             return request.user == obj.pet_user.user
         return False
     
-   
+    def get_likes(self, obj):
+        return obj.likes.count()
 
     class Meta:
         model = Post
-        fields = ('id', 'pet_user', 'description','sitStartDate', 'sitEndDate', "is_owner",  "pets",)
+        fields = ('id', 'pet_user', 'description','sitStartDate', 'sitEndDate', "is_owner", "comments", "likes",  "pets",)
         
 class PostViewSet(viewsets.ViewSet):
     def list(self, request):
