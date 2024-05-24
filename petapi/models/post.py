@@ -12,9 +12,10 @@ class Post(models.Model):
    
     pet_user = models.ForeignKey(PetUser, on_delete=models.CASCADE, related_name="posts")
     
-    pets = models.ManyToManyField("Pet", through="PostPet", related_name="post_pets")
+    pets = models.ManyToManyField("Pet", through="PostPet", related_name="postpets")
 
-
+    comments = models.ManyToManyField('Comment', related_name='postcomments', blank=True)
+    likes = models.ManyToManyField(User, related_name='postlikes', blank=True)
 
  
   

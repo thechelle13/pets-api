@@ -6,6 +6,7 @@ from petapi.views import (
     UserViewSet,
     TypeViewSet,
     PetViewSet,
+    CommentViewSet,  
 )
 
 router = DefaultRouter(trailing_slash=False)
@@ -16,7 +17,7 @@ router.register(r'posts', PostViewSet, 'post')
 router.register(r"users", UserViewSet, basename="users")
 router.register(r"users/petusers", UserViewSet, basename="petusers")
 router.register(r"types", TypeViewSet, basename="type")
-
+router.register(r"comments", CommentViewSet, basename="comments")
 
 
 urlpatterns = [
