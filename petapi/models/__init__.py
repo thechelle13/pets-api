@@ -2,5 +2,9 @@ from .pet import Pet
 from .post import Post
 from .type import Type
 from .petUser import PetUser
-from .comment import Comment
-from .postComments import PostComments
+
+
+
+
+from .postPet import PostPet
+

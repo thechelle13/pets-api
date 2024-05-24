@@ -1,24 +1,65 @@
 [
-    {
-      "model": "petapi.type",
-      "pk": 1,
-      "fields": {
-        "label": "Dog"
-      }
-    },
-    {
-      "model": "petapi.type",
-      "pk": 2,
-      "fields": {
-        "label": "Cat"
-      }
-    },
-    {
-      "model": "petapi.type",
-      "pk": 3,
-      "fields": {
-        "label": "Hamster"
-      }
+  {
+    "model": "petapi.type",
+    "pk": 1,
+    "fields": {
+      "label": "Dog"
     }
-  ]
-  
+  },
+  {
+    "model": "petapi.type",
+    "pk": 2,
+    "fields": {
+      "label": "Cat"
+    }
+  },
+  {
+    "model": "petapi.type",
+    "pk": 3,
+    "fields": {
+      "label": "Hedgehog"
+    }
+  },
+  {
+    "model": "petapi.type",
+    "pk": 4,
+    "fields": {
+      "label": "Fish"
+    }
+  },
+  {
+    "model": "petapi.type",
+    "pk": 5,
+    "fields": {
+      "label": "Reptile"
+    }
+  },
+  {
+    "model": "petapi.type",
+    "pk": 6,
+    "fields": {
+      "label": "Bird"
+    }
+  },
+  {
+    "model": "petapi.type",
+    "pk": 7,
+    "fields": {
+      "label": "Rodent"
+    }
+  },
+  {
+    "model": "petapi.type",
+    "pk": 8,
+    "fields": {
+      "label": "Horse"
+    }
+  },
+  {
+    "model": "petapi.type",
+    "pk": 9,
+    "fields": {
+      "label": "Goat"
+    }
+  }
+]

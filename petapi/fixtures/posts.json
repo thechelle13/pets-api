@@ -4,14 +4,14 @@
         "pk": 1,
         "fields": {
             "description": "Sample post description 1",
-            "sitStartDate": "2023-01-15",
-            "sitEndDate": "2023-01-20",
-            "pet": 1,
+            "sitStartDate": "2024-06-15",
+            "sitEndDate": "2024-06-20",
+            "pets": [1, 2],
             "pet_user": 1,
             "approved": true,
-            "publication_date": "2023-01-01",
-            "comments": [],
-            "likes": []
+            "publication_date": "2024-05-17"
+           
+           
         }
     },
     {
@@ -19,14 +19,14 @@
         "pk": 2,
         "fields": {
             "description": "Sample post description 2",
-            "sitStartDate": "2023-01-15",
-            "sitEndDate": "2023-01-20",
-            "pet": 1,
-            "pet_user": 1,
+            "sitStartDate": "2024-07-15",
+            "sitEndDate": "2024-07-20",
+            "pets": [3, 4],
+            "pet_user": 2,
             "approved": true,
-            "publication_date": "2023-01-01",
-            "comments": [],
-            "likes": []
+            "publication_date": "2024-04-07"
+       
+        
         }
     },
     {
@@ -34,29 +34,14 @@
         "pk": 3,
         "fields": {
             "description": "Sample post description 3",
-            "sitStartDate": "2023-01-15",
-            "sitEndDate": "2023-01-20",
-            "pet": 1,
-            "pet_user": 1,
+            "sitStartDate": "2024-07-15",
+            "sitEndDate": "2024-07-20",
+            "pets": [5, 6],
+            "pet_user": 3,
             "approved": true,
-            "publication_date": "2023-01-01",
-            "comments": [],
-            "likes": []
-        }
-    },
-    {
-        "model": "petapi.post",
-        "pk": 4,
-        "fields": {
-            "description": "Sample post description 4",
-            "sitStartDate": "2023-01-15",
-            "sitEndDate": "2023-01-20",
-            "pet": 1,
-            "pet_user": 1,
-            "approved": true,
-            "publication_date": "2023-01-01",
-            "comments": [],
-            "likes": []
+            "publication_date": "2024-05-07"
+           
+        
         }
     }
 ]

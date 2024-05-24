@@ -9,12 +9,12 @@ class Post(models.Model):
     sitEndDate = models.DateField()
     publication_date = models.DateField(auto_now_add=True)
     approved = models.BooleanField()
-    pet = models.ForeignKey(Pet, on_delete=models.CASCADE)
+   
     pet_user = models.ForeignKey(PetUser, on_delete=models.CASCADE, related_name="posts")
     
+    pets = models.ManyToManyField("Pet", through="PostPet", related_name="post_pets")
 
-    comments = models.ManyToManyField('Comment', related_name='post_comments', blank=True)
 
 
-    likes = models.ManyToManyField(User, related_name='post_likes', blank=True)
-
+ 
+  

@@ -26,8 +26,70 @@
         "fields": {
             "type": 3,
             "name": "Scotty",
-            "user": 1,
+            "user": 2,
             "image_url": "https://example.com/image1.jpg"
         }
     }
-]
+    ,
+        {
+          "model": "petapi.pet",
+          "pk": 4,
+          "fields": {
+            "type": 4,
+            "name": "Spike",
+            "user": 2,
+            "image_url": "https://example.com/image4.jpg"
+          }
+        },
+        {
+          "model": "petapi.pet",
+          "pk": 5,
+          "fields": {
+            "type": 5,
+            "name": "Nemo",
+            "user": 3,
+            "image_url": "https://example.com/image5.jpg"
+          }
+        },
+        {
+          "model": "petapi.pet",
+          "pk": 6,
+          "fields": {
+            "type": 6,
+            "name": "Tweety",
+            "user": 3,
+            "image_url": "https://example.com/image6.jpg"
+          }
+        },
+        {
+          "model": "petapi.pet",
+          "pk": 7,
+          "fields": {
+            "type": 7,
+            "name": "Whiskers",
+            "user": 1,
+            "image_url": "https://example.com/image7.jpg"
+          }
+        },
+        {
+          "model": "petapi.pet",
+          "pk": 8,
+          "fields": {
+            "type": 8,
+            "name": "Buddy",
+            "user": 1,
+            "image_url": "https://example.com/image8.jpg"
+          }
+        },
+        {
+          "model": "petapi.pet",
+          "pk": 9,
+          "fields": {
+            "type": 9,
+            "name": "Billy",
+            "user": 1,
+            "image_url": "https://example.com/image9.jpg"
+          }
+        }
+      ]
+      
