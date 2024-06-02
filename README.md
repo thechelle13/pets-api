@@ -1,4 +1,4 @@
-# Python + Django
+# Python + Django + Sqlite
 
 ## Community Pets - Project README
 
@@ -40,7 +40,14 @@ https://dbdiagram.io/d/My-page-API-64ff5c7302bd1c4a5e5d5bb6
 3. **Use the imported collection to test the API endpoints. Make sure the Django development server is running.**
 
 
+In progress.
+
 Feel free to adjust the formatting or add more details as needed. Let me know if you need further assistance!
+
+
+
+
+
 
 
 
