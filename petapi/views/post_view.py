@@ -5,7 +5,6 @@ from petapi.models import Post, PetUser, Pet
 from .users_view import PetUserSerializer
 from .type_view import TypeSerializer
 from .comment_view import CommentSerializer
-
 from .pet_view import PetSerializer
 from django.contrib.auth.models import User
 
@@ -14,8 +13,6 @@ class PostSerializer(serializers.ModelSerializer):
    
     pet_user = PetUserSerializer(many=False)
     is_owner = serializers.SerializerMethodField()
-    
-
     pets = PetSerializer(many=True)
     comments = CommentSerializer(many=True, read_only=True)
     likes = serializers.SerializerMethodField(read_only=True)
@@ -34,6 +31,7 @@ class PostSerializer(serializers.ModelSerializer):
         fields = ('id', 'pet_user', 'description','sitStartDate', 'sitEndDate', "is_owner", "comments", "likes",  "pets",)
         
 class PostViewSet(viewsets.ViewSet):
+    
     def list(self, request):
         queryset = Post.objects.all()
         serializer = PostSerializer(queryset, many=True, context={'request': request})
@@ -52,17 +50,16 @@ class PostViewSet(viewsets.ViewSet):
        
         pet_user = PetUser.objects.get(user=request.user)
         
-       
         description = request.data.get("description")
         sitStartDate = request.data.get("sitStartDate")
         sitEndDate = request.data.get("sitEndDate")
-        pet = request.data.get("pet")
+        pets = request.data.get("pet")
        
-        approved = request.data.get("approved", False) 
+        approved = request.data.get("approved", False)
         
-        pet_serializer = PetSerializer(data=pet)
+        pet_serializer = PetSerializer(data=pets)
         if pet_serializer.is_valid():
-            pet = pet_serializer.save()
+            pets = pet_serializer.save()
         else:
             return Response(pet_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -73,7 +70,7 @@ class PostViewSet(viewsets.ViewSet):
             description=description,
             sitStartDate=sitStartDate,
             sitEndDate=sitEndDate,
-            pet=pet,
+            pets=pets,
          
             approved=approved
            
@@ -82,23 +79,44 @@ class PostViewSet(viewsets.ViewSet):
       
         serializer = PostSerializer(post)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    # def create(self, request):
+    #     pet_user = PetUser.objects.get(user=request.user)
         
-    # def update(self, request, pk=None):
+    #     # Extract pet ID from request data
+    #     pet_id = request.data.get("pet")
+        
+    #     # Validate and retrieve the pet object
     #     try:
-    #         post = Post.objects.get(pk=pk)
+    #         pet = Pet.objects.get(id=pet_id)
+    #     except Pet.DoesNotExist:
+    #         return Response({"pet": ["Invalid pet ID"]}, status=status.HTTP_400_BAD_REQUEST)
+        
+    #     # Create the post
+    #     serializer = PostSerializer(data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save(user=pet_user.user, pet_user=pet_user, pet=pet)
+    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+        
+    def update(self, request, pk=None):
+        try:
+            post = Post.objects.get(pk=pk)
 
             
-    #         self.check_object_permissions(request, post)
+            self.check_object_permissions(request, post)
 
-    #         serializer = PostSerializer(post, data=request.data, partial=True)
-    #         if serializer.is_valid():
-    #             serializer.save()
-    #             return Response(serializer.data, status=status.HTTP_200_OK)
+            serializer = PostSerializer(post, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
 
-    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    #     except Post.DoesNotExist:
-    #         return Response(status=status.HTTP_404_NOT_FOUND)    
+        except Post.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)    
         
     def destroy(self, request, pk=None):
         try:
